@@ -1,5 +1,7 @@
 package com.pbp.birthdaycountdown;
 
+import static java.lang.Math.abs;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,15 +17,17 @@ import java.util.Date;
 import android.widget.DatePicker;
 import java.util.Calendar;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    EditText name, date;
+    EditText name, date,tempats;
     Button btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         name = (EditText) findViewById(R.id.nama);
+        tempats = (EditText) findViewById(R.id.tempat);
         DatePicker bdtime = (DatePicker) findViewById(R.id.datePicker);
 
         btn = (Button) findViewById(R.id.save);
@@ -37,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
                     int day = bdtime.getDayOfMonth();
                     int month = bdtime.getMonth();
                     int year = bdtime.getYear();
+                    String tempat = tempats.getText().toString();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
-                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/");
-                    String nowtime = sdf.format(new Date()) + year;
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                    String nowtime = sdf.format(new Date());
                     SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
                     String datehbd = format.format(calendar.getTime());
                     Date date1;
@@ -48,15 +53,9 @@ public class MainActivity extends AppCompatActivity {
                     date2 = format.parse(nowtime);
                     date1 = format.parse(datehbd);
                     long difference = (date1.getTime() - date2.getTime());
-                    long differenceDates;
-                    if (difference <0){
-                        differenceDates = 365 + (difference / (24 * 60 * 60 * 1000));
-                    }
-                    else {
-                        differenceDates = difference / (24 * 60 * 60 * 1000);
-                    }
+                    long differenceDates = abs(difference / (24 * 60 * 60 * 1000));
                     String dayDifference = Long.toString(differenceDates);
-                    String str = "Hai " +nama+ ", Ultahmu Kurang "+dayDifference+"  Hari Lagi";
+                    String str = "Hai " +nama+ ", Kamu Lahir "+dayDifference+"  Hari Lalu di "+tempat+"";
                     Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
                     intent.putExtra("message_key", str);
                     startActivity(intent);
